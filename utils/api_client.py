@@ -22,7 +22,7 @@ class APIClient:
 
     def get(self, endpoint, params=None, use_auth=False):
         url = f"{self.base_url}/{endpoint}"
-        headers = self._get_headers(use_auth=use_auth) if use_auth else None
+        headers = self._get_headers(use_auth) if use_auth else None
         response = req.get(url, params=params, headers=headers)
         return response
 
