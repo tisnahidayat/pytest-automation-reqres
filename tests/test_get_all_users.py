@@ -7,16 +7,17 @@ from jsonschema import validate, ValidationError
 def api_client():
     return APIClient()
 
-def get_users_with_param(api_client):
-    response = api_client.get("api/users", params={"page": 2}, use_auth=True)
-    
+@pytest.mark.positive
+def test_get_all_users(api_client):
+    response = api_client.get("api/users", params={"page": 2})
+
     # Cek status & headers
     assert response.status_code == 200
     assert response.headers["Content-Type"] == "application/json; charset=utf-8"
 
     # Ambil data dan validasi schema
     jsonData = response.json()
-    schema = load_schema("posts_schema.json")
+    schema = load_schema("users_schema.json")
     try:
         validate(instance=jsonData, schema=schema)
     except ValidationError as e:

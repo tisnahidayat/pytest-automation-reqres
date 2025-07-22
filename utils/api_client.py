@@ -20,10 +20,9 @@ class APIClient:
             headers["x-api-key"] =  self.api_key
         return headers
 
-    def get(self, endpoint, params=None, use_auth=False):
+    def get(self, endpoint, params=None):
         url = f"{self.base_url}/{endpoint}"
-        headers = self._get_headers(use_auth) if use_auth else None
-        response = req.get(url, params=params, headers=headers)
+        response = req.get(url, params=params)
         return response
 
     def post(self, endpoint, data=None, use_auth=True):
