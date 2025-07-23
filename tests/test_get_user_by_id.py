@@ -9,7 +9,7 @@ def api_client():
 
 def test_get_user_by_id(api_client):
     
-    response = api_client.get(f"api/users/1")
+    response = api_client.get(f"api/users/1", use_auth=True)
     assert response.status_code == 200
     assert response.headers["Content-Type"] == "application/json; charset=utf-8"
 

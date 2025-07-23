@@ -9,7 +9,7 @@ def api_client():
 
 @pytest.mark.positive
 def test_get_all_users(api_client):
-    response = api_client.get("api/users", params={"page": 2})
+    response = api_client.get("api/users", params={"page": 1, "per_page": 12}, use_auth=True)
 
     # Cek status & headers
     assert response.status_code == 200
