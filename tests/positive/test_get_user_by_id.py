@@ -7,9 +7,10 @@ from jsonschema import validate, ValidationError
 def api_client():
     return APIClient()
 
+@pytest.mark.positive
 def test_get_user_by_id(api_client):
     
-    response = api_client.get(f"api/users/1", use_auth=True)
+    response = api_client.get(f"api/users/12", use_auth=True)
     assert response.status_code == 200
     assert response.headers["Content-Type"] == "application/json; charset=utf-8"
 
