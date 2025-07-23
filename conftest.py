@@ -20,7 +20,7 @@ def pytest_metadata(metadata):
     metadata['Date'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     metadata['Environment'] = 'Development'
     metadata['Version'] = '1.0.0'
-
+    
 @pytest.fixture(scope="module", autouse=True)
 def setup_module():
     print("Setup module")
