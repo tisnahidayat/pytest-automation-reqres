@@ -1,0 +1,22 @@
+{
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "string",
+            "minLength": 1
+        },
+        "job": {
+            "type": "string",
+            "minLength": 1
+        },
+        "id": {
+            "type": "string",
+            "format": "integer"
+        },
+        "createdAt": {
+            "type": "string",
+            "format": "date-time"
+        }
+    },
+    "required": ["name", "job"]
+}
