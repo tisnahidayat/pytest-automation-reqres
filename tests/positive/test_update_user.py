@@ -1,0 +1,37 @@
+import pytest
+from utils.api_client import APIClient
+from utils.schema_loader import load_schema
+from jsonschema import validate, ValidationError
+from utils.data_matches import assert_user_data_matches
+
+@pytest.fixture(scope="module")
+def api():
+    return APIClient()
+
+@pytest.mark.positive
+def test_update_user(api):
+    data = {
+        "name": "Jane Doe",
+        "job": "Senior Software Engineer"
+    }
+    response = api.put("api/users/2", data=data, use_auth=True)
+    
+    assert response.status_code == 200, f"Expected status code 200, got {response.status_code}"
+    assert response.headers["Content-Type"] == "application/json; charset=utf-8", f"Unexpected Content-Type header"
+    
+    jsonData = response.json()
+
+    schema = load_schema("user_update_schema.json")
+    try:
+        validate(instance=jsonData, schema=schema)
+    except ValidationError as e:
+        pytest.fail(f"Schema validation error: {e}")
+    
+    assert isinstance(jsonData, dict), "Response JSON is not a dictionary"
+    for key in ["name", "job", "updatedAt"]:
+        assert key in jsonData, f"Missing key: {key} in response data"
+        assert isinstance(jsonData[key], str) or isinstance(jsonData[key], int), f"Expected '{key}' to be a string or integer, got {type(jsonData[key])}"
+
+    assert_user_data_matches(jsonData, data)
+
+    assert response.elapsed.total_seconds() < 2, "Response took too long"
