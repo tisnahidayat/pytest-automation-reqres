@@ -3,7 +3,7 @@ import os
 import datetime
 
 @pytest.hookimpl(tryfirst=True)
-def _pytest_configure(config):
+def pytest_configure(config):
     report_dir = "reports"
     if not os.path.exists(report_dir):
         os.makedirs(report_dir)
