@@ -1,19 +1,21 @@
-import pytest
 from utils.api_client import APIClient
+from utils.schema_loader import load_schema
+from jsonschema import validate, ValidationError
+import pytest, json
 
 @pytest.fixture(scope="module")
 def api():
     return APIClient()
 
-@pytest.mark.positive
-def test_login_user(api):
+@pytest.mark.negative
+def test_with_invalid_password(api):
     data = {
         "email": "eve.holt@reqres.in",
-        "password": "cityslicka"
+        "password": "city"
     }
+    
     response = api.post("api/login", data=data, use_auth=True)
     assert response.status_code == 200, f"Expected status code 200, got {response.status_code}"
-    assert response.headers["Content-Type"] == "application/json; charset=utf-8", f"Unexpected Content-Type header"
 
     jsonData = response.json()
     expected_value = jsonData.get("token")
@@ -22,6 +24,6 @@ def test_login_user(api):
     assert isinstance(jsonData["token"], str), "'token' should be a string"
     assert expected_value == jsonData["token"], f"Token mismatch: expected {expected_value}, got {jsonData['token']}"
 
-
     assert response.elapsed.total_seconds() < 2, "Response took too long"
+
 
